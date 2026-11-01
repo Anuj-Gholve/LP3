@@ -1,0 +1,824 @@
+LP3 PRACTICAL VIVA PREPARATION
+GROUP C: BLOCKCHAIN TECHNOLOGY (BCT)
+Based on the submitted Practical 1, Practical 2, BankAccount.sol, and StudentData.sol
+
+============================================================
+HOW TO USE THIS FILE
+============================================================
+1. Read the short explanations first.
+2. Practise answering the MUST-KNOW questions aloud.
+3. For Solidity practicals, be ready to explain every function, keyword, and require statement.
+4. If the examiner asks you to demonstrate a transaction, use a test network and never reveal your Secret Recovery Phrase.
+5. Gas prices, wallet screens, and supported test networks can change. Explain the underlying concept rather than memorising a particular live fee.
+
+============================================================
+PRACTICAL 1: METAMASK AND ETHER SPENDING PER TRANSACTION
+============================================================
+
+A. PRACTICAL SUMMARY
+MetaMask is a cryptocurrency wallet used to manage Ethereum accounts, send and receive assets, and connect to decentralised applications (dApps). A transaction can be sent through the wallet, then inspected using a block explorer with its transaction hash.
+
+The submitted practical describes installing MetaMask, creating/importing a wallet, selecting a network, sending a test transaction, and observing its gas usage and fee.
+
+B. KEY TERMS
+1. Blockchain:
+   A distributed ledger in which transactions are grouped into blocks and linked cryptographically.
+
+2. Ethereum:
+   A blockchain platform that supports Ether (ETH), accounts, and smart contracts.
+
+3. Ether (ETH):
+   The native cryptocurrency used on Ethereum. It is also used to pay transaction execution fees.
+
+4. MetaMask:
+   A wallet interface that manages account keys and helps users interact with Ethereum-compatible networks and dApps.
+
+5. Wallet address:
+   A public identifier that can be shared to receive assets. An Ethereum address is commonly represented as a 42-character hexadecimal string beginning with 0x.
+
+6. Private key:
+   A secret cryptographic key that authorises transactions for an account. It must never be shared.
+
+7. Secret Recovery Phrase (SRP):
+   A set of recovery words used to restore wallet access. Anyone who obtains it may be able to control the wallet.
+
+8. Public address vs private key:
+   The address may be shared to receive funds; the private key and recovery phrase must remain secret.
+
+9. Mainnet:
+   The live public blockchain where assets generally have real monetary value.
+
+10. Testnet:
+    A network used to test transactions and smart contracts with test tokens. Test tokens are not intended to have real monetary value.
+
+11. Faucet:
+    A service that may provide testnet tokens for development and learning.
+
+12. Transaction hash:
+    A unique identifier for a submitted blockchain transaction. It can be searched in the relevant block explorer.
+
+13. Block explorer:
+    A website/interface for inspecting transactions, addresses, blocks, and contract activity on a particular network.
+
+14. Gas:
+    A unit measuring computational work required to execute an Ethereum transaction or smart contract operation.
+
+15. Gas limit:
+    The maximum amount of gas a transaction is allowed to consume.
+
+16. Gas used:
+    The amount of gas actually consumed by the transaction.
+
+17. Gas price / effective gas price:
+    The price paid per unit of gas. On modern Ethereum transactions, the final effective price depends on the fee-market parameters and network conditions.
+
+18. Gwei:
+    A denomination of ETH. 1 ETH = 1,000,000,000 Gwei.
+
+19. Transaction fee:
+    In a simplified legacy model: gas used × gas price. On modern Ethereum, the fee is generally gas used × effective gas price. Do not confuse gas limit with gas actually used.
+
+20. Network congestion:
+    When demand for block space is high, users may need to offer higher fees to have transactions included sooner.
+
+C. PRACTICAL WORKING — HOW TO EXPLAIN IT
+1. Install MetaMask only from its official source or the official mobile app store listing.
+2. Create a wallet or import an existing wallet.
+3. Set a device/local-access password and securely back up the recovery phrase.
+4. Select the intended network.
+5. For a classroom experiment, use a supported testnet and obtain test tokens from a trusted faucet if available.
+6. Select Send, enter the recipient address and amount, review the network and fee, and confirm.
+7. Copy the transaction hash after submission.
+8. Open the block explorer for that exact network and search the hash.
+9. Observe status, gas used, effective gas price, and transaction fee.
+
+IMPORTANT ACCURACY NOTE:
+The submitted notes mention Goerli. Goerli has been deprecated; if it is not available in the current wallet, use a currently supported test network specified by your instructor. The concept being examined is testnet usage, not a particular old testnet name.
+
+D. MUST-KNOW VIVA QUESTIONS WITH ANSWERS
+
+Q1. What is MetaMask?
+A. MetaMask is a cryptocurrency wallet that lets users manage Ethereum-compatible accounts, sign transactions, and connect to dApps.
+
+Q2. Is MetaMask itself a blockchain?
+A. No. It is a wallet interface that connects to blockchain networks.
+
+Q3. What is the purpose of a wallet?
+A. It manages access to blockchain accounts and allows users to sign transactions and interact with blockchain applications.
+
+Q4. What is the difference between a wallet address and a private key?
+A. The address is shared to receive assets. The private key authorises transactions and must remain secret.
+
+Q5. What is a Secret Recovery Phrase?
+A. It is a recovery phrase used to restore wallet access. It must be kept private and securely backed up.
+
+Q6. Is the MetaMask password the same as the Secret Recovery Phrase?
+A. No. The password typically unlocks the wallet locally on a device; the recovery phrase is used to restore the wallet.
+
+Q7. What happens if I lose the recovery phrase and lose access to my wallet?
+A. Recovery may be impossible if no other valid backup or access method exists. The wallet provider generally cannot recover the secret phrase for you.
+
+Q8. Why should we use a testnet for practicals?
+A. It lets us test transactions and smart contracts using test tokens rather than risking real assets.
+
+Q9. What is Ether?
+A. ETH is Ethereum's native cryptocurrency and is used to pay network transaction fees.
+
+Q10. What is gas?
+A. Gas measures the computational work required to process a transaction or execute a smart contract.
+
+Q11. What is the difference between gas limit and gas used?
+A. Gas limit is the maximum allowed for the transaction; gas used is the amount actually consumed.
+
+Q12. What is Gwei?
+A. Gwei is a unit of ETH commonly used to express gas prices. One ETH equals one billion Gwei.
+
+Q13. How do you calculate the transaction fee?
+A. Simplified: gas used multiplied by the effective gas price. Convert the result from Gwei to ETH when needed.
+
+Q14. If a transaction has a gas-used value of 21,000 and an effective gas price of 20 Gwei, what is its fee?
+A. 21,000 × 20 = 420,000 Gwei = 0.00042 ETH.
+
+Q15. Why might two transactions have different fees?
+A. They may consume different amounts of gas or have different effective gas prices due to network conditions and transaction fee settings.
+
+Q16. Why does a smart-contract interaction often cost more gas than a simple ETH transfer?
+A. Contract interactions execute program instructions and may read/write storage, which usually requires more computation and gas.
+
+Q17. What is a transaction hash?
+A. It is a unique identifier used to find and inspect a transaction.
+
+Q18. What information can a block explorer show?
+A. It can show transaction status, sender, recipient, value, block, gas used, gas price, and fee, depending on the explorer and transaction type.
+
+Q19. Does a transaction fee always depend on the amount of ETH sent?
+A. Not directly. The fee mainly depends on gas consumed and the gas price. A simple transfer of different amounts can use similar gas, while contract calls may use much more.
+
+Q20. What happens if a transaction fails?
+A. The state changes are reverted, but gas spent on executing the failed transaction is generally still charged.
+
+Q21. What is network congestion?
+A. It is high demand for transaction processing compared with available block space, which can increase the fee needed for timely inclusion.
+
+Q22. Can I use test ETH to buy real-world goods?
+A. No. Testnet ETH is for testing and normally has no real monetary value.
+
+Q23. Why must I check the network before sending?
+A. An address may look similar across networks, but assets and transactions exist on a specific network. Sending on the wrong network can cause loss or difficulty recovering assets.
+
+Q24. What is a dApp?
+A. A decentralised application that interacts with a blockchain, often through smart contracts.
+
+Q25. Why is the transaction fee visible before confirmation?
+A. The wallet estimates the expected gas requirement and fee so the user can review the transaction before signing.
+
+E. TRICKY / FOLLOW-UP QUESTIONS
+Q26. Is gas limit multiplied by gas price always the final fee?
+A. It is a simplified formula used in some explanations. The actual fee is based on gas used and the effective gas price; the limit is a cap, not necessarily the amount consumed.
+
+Q27. If I send 0 ETH, will the transaction necessarily cost zero?
+A. No. A transaction may still require gas to be processed even if its transferred value is zero.
+
+Q28. Can anyone spend funds using only my public address?
+A. No. Spending requires authorisation, normally through the private key or wallet signing mechanism. Keep recovery credentials secret.
+
+Q29. Does MetaMask hold the blockchain itself?
+A. No. It manages account access and communicates with blockchain networks through network providers.
+
+Q30. What should you do if a website asks for your recovery phrase?
+A. Do not enter it. A legitimate dApp connection should not require the recovery phrase.
+
+============================================================
+PRACTICAL 2: CREATING A WALLET USING METAMASK
+============================================================
+
+A. PRACTICAL SUMMARY
+The submitted practical creates a new wallet, sets a password, backs up the recovery phrase, obtains the public address, and explains sending/receiving assets and connecting to dApps.
+
+B. VIVA QUESTIONS WITH ANSWERS
+
+Q1. What are the basic steps to create a MetaMask wallet?
+A. Install the official wallet, choose Create Wallet, set a strong local password, securely back up the recovery phrase, and confirm it.
+
+Q2. What is the purpose of the password?
+A. It protects local access to the wallet on that device. It is not a substitute for protecting the recovery phrase.
+
+Q3. Why is the recovery phrase important?
+A. It can restore wallet access if the wallet is reinstalled or the device is lost.
+
+Q4. Can I share my wallet address?
+A. Yes. It is used to receive assets, though sharing it can reveal transaction history associated with that address.
+
+Q5. Can I share my recovery phrase?
+A. Never. Anyone who gets it may gain control of the wallet.
+
+Q6. How do you receive cryptocurrency?
+A. Share the correct public address for the intended network and wait for the transaction to be confirmed.
+
+Q7. How do you send cryptocurrency?
+A. Enter the recipient's address and amount, confirm the network, review the fee, and approve/sign the transaction.
+
+Q8. What is a dApp connection?
+A. It allows a decentralised application to request wallet interaction, such as reading the connected address or requesting a transaction signature.
+
+Q9. Does connecting a wallet automatically mean a transaction is sent?
+A. No. A connection may only expose the selected public account to the site. Transactions generally require a separate approval/signature.
+
+Q10. What is a hardware wallet?
+A. A device designed to keep private keys isolated from a general-purpose computer and sign transactions securely.
+
+Q11. What is two-factor authentication (2FA)?
+A. An additional authentication step. It is especially relevant to exchange accounts; it does not replace protecting the wallet recovery phrase.
+
+Q12. What is the difference between custodial and non-custodial wallets?
+A. In a custodial wallet, a provider controls the private keys on behalf of the user. In a non-custodial wallet, the user controls the keys or recovery credentials.
+
+Q13. Is MetaMask generally custodial or non-custodial?
+A. It is a non-custodial wallet: users are responsible for their wallet credentials.
+
+Q14. What is a seed phrase?
+A. Another common term for the recovery phrase that can derive or restore wallet keys.
+
+Q15. What if I accidentally send assets to the wrong address?
+A. Blockchain transactions are generally irreversible. Recovery depends on the recipient and circumstances, so always verify the address before confirming.
+
+Q16. Why should the first experiment be done with a small amount or test tokens?
+A. To learn the workflow and reduce the risk of losing real funds.
+
+Q17. Why should wallet software be kept updated?
+A. Updates can include security fixes, compatibility improvements, and bug fixes.
+
+Q18. What is a phishing attack in the wallet context?
+A. A scam that tricks a user into revealing credentials or approving a malicious transaction.
+
+Q19. What should you verify before approving a transaction?
+A. The network, recipient/contract address, amount, requested permissions, and estimated fee.
+
+Q20. Does a public address reveal a person's real identity automatically?
+A. Not necessarily, but transactions are public and may become linkable to an identity through other information.
+
+============================================================
+PRACTICAL 3: BANK ACCOUNT SMART CONTRACT
+============================================================
+
+SOURCE CODE PROVIDED (BankAccount.sol)
+------------------------------------------------------------
+SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract BankAccount {
+    mapping(address => uint256) private balances;
+
+    function deposit() external payable {
+        require(msg.value > 0, "Deposit must be greater than 0");
+        balances[msg.sender] += msg.value;
+    }
+
+    function withdraw(uint256 amount) external {
+        require(amount > 0, "Amount must be greater than 0");
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+
+        balances[msg.sender] -= amount;
+
+        (bool success, ) = payable(msg.sender).call{value: amount}("");
+        require(success, "Transfer failed");
+    }
+
+    function showBalance() external view returns (uint256) {
+        return balances[msg.sender];
+    }
+}
+------------------------------------------------------------
+
+A. CODE EXPLANATION, LINE BY LINE
+
+1. // SPDX-License-Identifier: MIT
+   Declares the source-code licence identifier. It is metadata for tooling and does not implement banking logic.
+
+2. pragma solidity ^0.8.20;
+   Specifies a compatible Solidity compiler version: version 0.8.20 or later in the 0.8.x series, but below 0.9.0.
+
+3. contract BankAccount { ... }
+   Declares a smart contract named BankAccount.
+
+4. mapping(address => uint256) private balances;
+   Creates a mapping from each Ethereum address to an unsigned integer balance, measured in wei. 'private' prevents Solidity-generated external getter access; it does NOT make blockchain storage secret.
+
+5. function deposit() external payable
+   Defines a function callable externally. 'payable' allows the function to receive ETH with the call.
+
+6. require(msg.value > 0, "Deposit must be greater than 0");
+   Reverts the call if the user sends zero ETH.
+
+7. balances[msg.sender] += msg.value;
+   Adds the received value to the balance associated with the caller's address. msg.sender is the immediate caller; msg.value is the amount of ETH sent with this call, measured in wei.
+
+8. function withdraw(uint256 amount) external
+   Defines an externally callable withdrawal function. The amount is specified in wei.
+
+9. require(amount > 0, "Amount must be greater than 0");
+   Rejects a zero withdrawal request.
+
+10. require(balances[msg.sender] >= amount, "Insufficient balance");
+    Prevents the caller from withdrawing more than their recorded balance.
+
+11. balances[msg.sender] -= amount;
+    Reduces the caller's recorded balance before making the external transfer. This follows the checks-effects-interactions pattern.
+
+12. (bool success, ) = payable(msg.sender).call{value: amount}("");
+    Attempts to transfer 'amount' wei to the caller. The address is converted to a payable address. The call returns a success flag and return data; the return data is ignored here.
+
+13. require(success, "Transfer failed");
+    Reverts if the transfer fails. Because a revert rolls back the whole transaction, the earlier balance reduction is also rolled back.
+
+14. function showBalance() external view returns (uint256)
+    Defines a read-only function returning the caller's recorded balance in wei. 'view' means the function promises not to modify blockchain state.
+
+15. return balances[msg.sender];
+    Returns the mapping entry for the caller.
+
+B. MUST-KNOW BANK CONTRACT VIVA
+
+Q1. What is a smart contract?
+A. A program deployed on a blockchain that executes according to its code when called.
+
+Q2. What is Solidity?
+A. A high-level programming language commonly used to write Ethereum smart contracts.
+
+Q3. What is the purpose of the BankAccount contract?
+A. It tracks a separate recorded balance for each caller and supports depositing, withdrawing, and checking that recorded balance.
+
+Q4. What is a mapping?
+A. A key-value data structure. Here, an address is the key and uint256 balance is the value.
+
+Q5. Why is address used as the mapping key?
+A. Each Ethereum account has an address, allowing the contract to maintain a balance entry per address.
+
+Q6. What does uint256 mean?
+A. An unsigned 256-bit integer. It cannot represent negative numbers.
+
+Q7. What does private mean in this code?
+A. It restricts direct access through Solidity's generated interface and other contracts' ordinary member access. It does not make blockchain data confidential.
+
+Q8. What does payable mean?
+A. It marks a function or address as able to receive or transfer ETH in the relevant context.
+
+Q9. What is msg.sender?
+A. The address of the immediate caller of the current function.
+
+Q10. What is msg.value?
+A. The amount of ETH sent with the current call, denominated in wei. It is available in payable functions.
+
+Q11. What is wei?
+A. The smallest standard denomination of ETH. 1 ETH = 10^18 wei.
+
+Q12. Why does deposit() have no amount parameter?
+A. The deposit amount is supplied as ETH attached to the transaction and accessed using msg.value.
+
+Q13. Why is deposit() payable?
+A. Without payable, the function cannot accept ETH through that function call.
+
+Q14. What does require() do?
+A. It checks a condition. If the condition is false, execution reverts and state changes from that transaction are undone.
+
+Q15. Why does deposit require msg.value > 0?
+A. To reject zero-value deposits.
+
+Q16. Why does withdraw() take an amount parameter?
+A. The caller specifies how much of their recorded balance they want to withdraw.
+
+Q17. Why check the balance before withdrawal?
+A. To prevent a caller from withdrawing more than the balance recorded for their address.
+
+Q18. Why is the balance reduced before sending ETH?
+A. To follow checks-effects-interactions and reduce re-entrancy risk by updating internal state before the external call.
+
+Q19. What is re-entrancy?
+A. A vulnerability in which an external call can re-enter a contract before the original operation is fully complete, potentially exploiting inconsistent state.
+
+Q20. What is the purpose of (bool success, )?
+A. It captures the success status of the low-level call; the second returned value is return data and is ignored.
+
+Q21. Why use call{value: amount}("")?
+A. It makes a low-level external call that transfers the specified ETH amount to the recipient.
+
+Q22. What happens if the transfer fails?
+A. require(success, ...) reverts the transaction, rolling back the balance reduction.
+
+Q23. Why is showBalance() marked view?
+A. It reads state but does not modify it.
+
+Q24. Does showBalance() show the total ETH held by the contract?
+A. No. It returns the caller's recorded mapping balance, not the contract's total ETH balance.
+
+Q25. What is the difference between the contract's ETH balance and balances[msg.sender]?
+A. The contract's ETH balance is the actual ETH held by the contract address. balances[msg.sender] is the internal accounting amount recorded for one user.
+
+Q26. What unit is amount measured in?
+A. Wei, because Solidity values transferred as ETH use wei as the base unit.
+
+Q27. How can 1 ETH be represented in Solidity?
+A. 1 ether is equivalent to 10^18 wei. Solidity also supports denomination expressions such as 1 ether.
+
+Q28. Does this contract have an owner or administrator?
+A. No. The provided code has no owner variable or owner-only restriction.
+
+Q29. Can one user view another user's recorded balance using showBalance()?
+A. The function only returns the caller's entry. However, the mapping's data is on a public blockchain and 'private' is not confidentiality. The code has no explicit function to return another address's balance.
+
+Q30. Does deploying the contract cost gas?
+A. Yes. Contract deployment stores contract bytecode and requires a transaction, so it consumes gas.
+
+Q31. Do deposit and withdraw cost gas?
+A. Yes. They change state and transfer ETH, so they require transactions and gas.
+
+Q32. Does a view call always cost gas?
+A. A local read-only call made without a transaction normally does not cost the caller an on-chain transaction fee. Calling it as part of an on-chain transaction can consume gas.
+
+Q33. What happens if withdraw amount is zero?
+A. The first require condition fails and the transaction reverts.
+
+Q34. What happens if the user has insufficient recorded balance?
+A. The second require condition fails and the transaction reverts.
+
+Q35. What happens if a withdrawal recipient rejects ETH?
+A. The low-level call may fail; require(success, ...) then reverts and the accounting update is undone.
+
+C. DRY RUN EXAMPLE
+Assume the caller deposits 1 ETH.
+- msg.value = 1 ETH = 1,000,000,000,000,000,000 wei.
+- balances[caller] increases by that amount.
+If the same caller withdraws 0.4 ETH:
+- amount = 400,000,000,000,000,000 wei.
+- The contract checks that the recorded balance is sufficient.
+- It reduces the recorded balance and attempts the transfer.
+- If successful, the recorded balance becomes 0.6 ETH.
+- If the transfer fails, the entire transaction reverts and the balance reduction is undone.
+
+D. TRICKY BANK CONTRACT QUESTIONS
+
+Q36. Is the mapping balance automatically the same as the contract's ETH balance?
+A. Not necessarily. The mapping is internal accounting; actual ETH held by the contract is a separate balance.
+
+Q37. Does 'private' hide balances from blockchain explorers?
+A. No. Blockchain state is publicly observable in principle. 'private' is a Solidity access-control label, not encryption.
+
+Q38. What is checks-effects-interactions?
+A. A smart-contract design pattern: first check conditions, then update internal state, then interact with external addresses.
+
+Q39. Why is a revert useful?
+A. It stops invalid execution and rolls back state changes made in that transaction.
+
+Q40. Can the contract owner withdraw every user's funds?
+A. There is no owner function in this code. The only withdraw function sends funds to msg.sender and limits withdrawal to that caller's recorded balance.
+
+============================================================
+PRACTICAL 4: STUDENT DATA USING STRUCTS, ARRAYS, FALLBACK
+============================================================
+
+SOURCE CODE PROVIDED (StudentData.sol)
+------------------------------------------------------------
+SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract StudentData {
+    struct Student {
+        uint rollNo;
+        string name;
+        uint age;
+        string department;
+    }
+
+    Student[] public students;
+
+    function addStudent(
+        uint _rollNo,
+        string memory _name,
+        uint _age,
+        string memory _department
+    ) public {
+        students.push(Student(_rollNo, _name, _age, _department));
+    }
+
+    function getStudent(uint _index) public view returns (
+        uint, string memory, uint, string memory
+    ) {
+        Student memory s = students[_index];
+        return (s.rollNo, s.name, s.age, s.department);
+    }
+
+    function getStudentCount() public view returns (uint) {
+        return students.length;
+    }
+
+    fallback() external payable {
+    }
+
+    receive() external payable {
+    }
+}
+------------------------------------------------------------
+
+A. CODE EXPLANATION
+
+1. struct Student { ... }
+   Defines a custom data type containing a student's roll number, name, age, and department.
+
+2. uint rollNo;
+   Stores the roll number as an unsigned integer.
+
+3. string name;
+   Stores the student's name as a string.
+
+4. uint age;
+   Stores the age as an unsigned integer.
+
+5. string department;
+   Stores the department name as a string.
+
+6. Student[] public students;
+   Declares a dynamic array of Student structures. 'public' causes Solidity to generate a getter for individual array elements.
+
+7. function addStudent(...) public
+   Allows a caller to append a student record to the array.
+
+8. string memory _name and string memory _department
+   'memory' indicates temporary data location for these string parameters during function execution.
+
+9. students.push(Student(_rollNo, _name, _age, _department));
+   Creates a Student value from the parameters and appends it to the end of the array.
+
+10. function getStudent(uint _index) public view returns (...)
+    Reads and returns the student fields at a particular array index.
+
+11. Student memory s = students[_index];
+    Copies the selected student record to memory for use in this function. If the index is outside the array bounds, the call reverts.
+
+12. return (s.rollNo, s.name, s.age, s.department);
+    Returns the selected student's four fields.
+
+13. function getStudentCount() public view returns (uint)
+    Returns the number of student records in the array.
+
+14. return students.length;
+    Returns the number of elements in the array.
+
+15. fallback() external payable { }
+    A fallback function is called when a call does not match an existing function's selector, or in certain cases when calldata is present but no function matches. This fallback is payable, so it can receive ETH in applicable calls.
+
+16. receive() external payable { }
+    A receive function is called for plain ETH transfers with empty calldata, if it exists. It is payable by definition.
+
+B. MUST-KNOW STUDENT CONTRACT VIVA
+
+Q1. What is a struct?
+A. A user-defined type that groups related variables of potentially different types into one record.
+
+Q2. Why use a Student struct?
+A. It groups roll number, name, age, and department as one student's record.
+
+Q3. What is an array?
+A. A collection of elements stored under one variable name and accessed by index.
+
+Q4. What is a dynamic array?
+A. An array whose length can change during execution. Student[] is dynamic because records can be appended.
+
+Q5. What does Student[] public students mean?
+A. It declares a public dynamic array of Student records.
+
+Q6. What does push() do?
+A. It appends a new element to the end of a dynamic storage array.
+
+Q7. What is the purpose of addStudent()?
+A. It constructs a Student record from the supplied values and appends it to students.
+
+Q8. Why are the string parameters marked memory?
+A. Strings are reference types, and memory specifies temporary memory for those parameters during the call.
+
+Q9. What does getStudent() do?
+A. It returns the roll number, name, age, and department of the student at the given index.
+
+Q10. What happens if an invalid index is passed to getStudent()?
+A. The array access is out of bounds, so the call reverts.
+
+Q11. What does getStudentCount() return?
+A. The current number of records in the students array.
+
+Q12. What does students.length mean?
+A. It returns the number of elements in the array.
+
+Q13. Why are getStudent() and getStudentCount() marked view?
+A. They read contract state without modifying it.
+
+Q14. What is fallback()?
+A. A special function invoked when calldata does not match a function selector, or in other cases where no function matches. It can be payable if it is declared payable.
+
+Q15. What is receive()?
+A. A special payable function invoked when ETH is sent with empty calldata, when the contract defines receive().
+
+Q16. What is the difference between fallback() and receive()?
+A. receive() handles plain ETH transfers with empty calldata. fallback() handles unmatched calls and can also receive ETH if payable, including certain calls with non-empty calldata.
+
+Q17. Why are both fallback() and receive() included here?
+A. To demonstrate both special functions and allow the contract to accept ETH through empty-calldata transfers or certain unmatched calls.
+
+Q18. What does external mean for these special functions?
+A. They are intended to be called externally and cannot be invoked internally like ordinary public functions by name.
+
+Q19. Why is fallback() payable?
+A. So it can accept ETH when it is invoked in a call that transfers ETH.
+
+Q20. Why is receive() payable?
+A. The receive function is specifically designed to receive plain ETH transfers and must be payable.
+
+Q21. Is the ETH received by fallback() or receive() assigned to a student?
+A. No. These functions have empty bodies and do not update any student record.
+
+Q22. Does the code validate duplicate roll numbers?
+A. No. The provided code appends any submitted record and does not check for duplicates.
+
+Q23. Does the code validate age or empty names?
+A. No. There are no such validation checks in the submitted implementation.
+
+Q24. Is the student data private?
+A. No. The array is declared public, and blockchain contract state is not suitable for confidential personal information.
+
+Q25. What is the difference between memory and storage?
+A. memory is temporary data for the current call; storage is persistent contract state kept on the blockchain.
+
+Q26. What is calldata?
+A. Read-only data area containing function-call input, commonly used for external function parameters.
+
+Q27. Does addStudent() cost gas?
+A. Yes. It modifies persistent contract storage, so calling it as a transaction consumes gas.
+
+Q28. Does getStudentCount() cost gas?
+A. A normal off-chain read call usually does not require an on-chain transaction fee. If invoked inside an on-chain transaction, it consumes gas as part of that transaction.
+
+Q29. Why is Student memory s used?
+A. It creates a temporary memory copy of the selected struct so its fields can be returned.
+
+Q30. What is the purpose of SPDX-License-Identifier?
+A. It identifies the source-code licence for tooling and verification.
+
+D. FALLBACK / RECEIVE SCENARIOS
+
+Q31. A user sends ETH directly to the contract with no calldata. Which function is normally called?
+A. receive(), if the contract defines it.
+
+Q32. A user calls an unknown function selector and sends ETH. Which function may be called?
+A. fallback(), because no declared function matches the selector; it must be payable to accept the ETH.
+
+Q33. A user calls an unknown function selector without sending ETH. Can fallback() still run?
+A. Yes, if the call reaches the contract and no function matches. The fallback does not have to receive ETH unless it is payable and value is sent.
+
+Q34. Does fallback() run when a valid declared function is called?
+A. Normally no. The matching declared function is executed.
+
+Q35. What happens if ETH is sent with empty calldata but the contract has no receive() function?
+A. The EVM may route the call to a payable fallback function if one exists; otherwise the transfer generally reverts.
+
+E. TRICKY STUDENT CONTRACT QUESTIONS
+
+Q36. What is the first index of a Solidity array?
+A. Index 0.
+
+Q37. If three students have been added, what is students.length?
+A. 3. Their indexes are 0, 1, and 2.
+
+Q38. Does declaring students public make all student data confidential?
+A. No. Public state is accessible, and blockchain data should be considered public.
+
+Q39. What is one improvement you could make to addStudent()?
+A. Validate input, check whether a roll number already exists, or restrict who is allowed to add records, depending on the application's requirements.
+
+Q40. What is a possible limitation of storing student records directly on a public blockchain?
+A. Data may be permanently visible, and storage writes cost gas. Sensitive personal data should not be placed directly on a public chain.
+
+Q41. Does receive() have parameters?
+A. No. It has no parameters and no return value.
+
+Q42. Does fallback() have parameters in this code?
+A. No. This implementation declares no parameters and returns no value.
+
+Q43. Is the array fixed-size?
+A. No. Student[] is a dynamic array.
+
+Q44. Does getStudent() change the array?
+A. No. It is marked view and only reads a record.
+
+Q45. What happens if a transaction calls addStudent() successfully?
+A. The new record is appended to the array and persists in contract storage.
+
+============================================================
+CROSS-PRACTICAL BLOCKCHAIN THEORY
+============================================================
+
+Q1. What is decentralisation?
+A. A system design in which control and record keeping are distributed among multiple participants rather than depending on one central authority.
+
+Q2. What is consensus?
+A. A protocol by which blockchain participants agree on the valid state or ordering of transactions.
+
+Q3. What is a block?
+A. A data structure containing transactions and metadata that is linked to the blockchain.
+
+Q4. What is a smart contract deployment?
+A. A transaction that publishes contract bytecode to the blockchain and creates a contract address.
+
+Q5. What is an ABI?
+A. The Application Binary Interface describes how applications encode function calls and decode contract results.
+
+Q6. What is a transaction?
+A. A signed request that can change blockchain state, transfer assets, or invoke contract code.
+
+Q7. What is the difference between a transaction and a read call?
+A. A transaction is submitted to the network and can change state; an ordinary read call simulates execution without committing a state change.
+
+Q8. What is immutability?
+A. Once accepted and finalised under the network's rules, blockchain records are designed to be difficult to alter. Smart-contract code may not be changeable unless designed with an upgrade mechanism.
+
+Q9. What is a block explorer used for?
+A. To inspect transactions, addresses, blocks, contract details, and execution/fee information.
+
+Q10. What is a gas fee used for?
+A. It compensates for the computational resources used to process transactions and helps allocate limited block space.
+
+Q11. What is the difference between a wallet and an account?
+A. A wallet is software or hardware that manages keys and signs operations; an account is the on-chain identity/state associated with an address.
+
+Q12. What is a dApp?
+A. An application that uses blockchain networks and often smart contracts for some of its functionality.
+
+Q13. What is a revert?
+A. An execution failure that undoes state changes from the failed transaction, while gas for the attempted execution is generally still consumed.
+
+Q14. What is the difference between an externally owned account (EOA) and a contract account?
+A. An EOA is controlled by a private key; a contract account is controlled by deployed code.
+
+Q15. Why is blockchain suitable for audit trails?
+A. It can provide a shared, tamper-resistant history of transactions that participants can independently verify.
+
+============================================================
+QUICK REVISION: SOLIDITY KEYWORDS
+============================================================
+
+contract       - Declares a smart contract.
+pragma         - Specifies compiler version compatibility.
+mapping        - Key-value lookup structure.
+address        - Ethereum address type.
+uint / uint256 - Unsigned integer type.
+payable        - Allows receiving ETH in the relevant function/address context.
+external       - Function intended to be called from outside the contract.
+public         - Externally callable and internally accessible function; public state variables get generated getters.
+private        - Restricts Solidity-level direct access; does not encrypt blockchain data.
+view           - Reads state without modifying it.
+returns        - Declares return values.
+require        - Checks a condition and reverts if false.
+msg.sender     - Immediate caller's address.
+msg.value      - ETH sent with the current call, in wei.
+memory         - Temporary data location during execution.
+storage        - Persistent contract state.
+struct         - Groups related fields into one custom type.
+array          - Indexed collection of values.
+push()         - Appends to a dynamic storage array.
+length         - Number of elements in an array.
+fallback()     - Handles unmatched function calls and certain calldata cases.
+receive()      - Handles plain ETH transfers with empty calldata.
+call{value:x}  - Low-level call that can transfer x wei and returns a success flag and return data.
+
+============================================================
+LAST-MINUTE EXAM STRATEGY
+============================================================
+
+For any code practical, be prepared to answer these six questions:
+1. What is the aim of the practical?
+2. Explain the code's important lines and functions.
+3. Which data structures and Solidity keywords are used?
+4. What are the inputs, outputs, and expected result?
+5. What errors or invalid inputs are handled?
+6. What are the gas, security, and privacy considerations?
+
+For the BankAccount contract, remember:
+- deposit() uses msg.value.
+- withdraw() accepts amount in wei.
+- balances[msg.sender] records the caller's internal balance.
+- showBalance() returns the caller's recorded balance.
+- Checks-effects-interactions is used before the external transfer.
+
+For the StudentData contract, remember:
+- struct groups student fields.
+- Student[] is a dynamic array.
+- push() adds a record.
+- getStudent() reads by zero-based index.
+- getStudentCount() returns students.length.
+- receive() handles plain ETH with empty calldata.
+- fallback() handles unmatched calls.
+
+For MetaMask:
+- Never share the recovery phrase or private key.
+- Check the network and recipient before confirming.
+- Use the matching block explorer for the network.
+- Fee depends on gas used and effective gas price; it is not simply the ETH amount sent.
+
+END OF BCT VIVA NOTES

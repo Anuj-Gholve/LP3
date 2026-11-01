@@ -2,38 +2,46 @@
 pragma solidity ^0.8.20;
 
 contract StudentData {
+
+    // Structure to store student details
     struct Student {
-        uint256 id;
+        uint rollNo;
         string name;
-        uint8 age;
-        string course;
+        uint age;
+        string department;
     }
 
-    Student[] private students;
+    // Array to store multiple students
+    Student[] public students;
 
-    event StudentAdded(uint256 id, string name, string course);
-    event FallbackCalled(address sender, uint value, string message);
-
-    function addStudent(uint256 _id, string memory _name, uint8 _age, string memory _course) public {
-        students.push(Student(_id, _name, _age, _course));
-        emit StudentAdded(_id, _name, _course);
+    // Function to add student data
+    function addStudent(
+        uint _rollNo,
+        string memory _name,
+        uint _age,
+        string memory _department
+    ) public {
+        students.push(Student(_rollNo, _name, _age, _department));
     }
 
-    function getStudent(uint256 index) public view returns (uint256, string memory, uint8, string memory) {
-        require(index < students.length, "Invalid index");
-        Student memory s = students[index];
-        return (s.id, s.name, s.age, s.course);
+    // Function to get student data
+    function getStudent(uint _index) public view returns (
+        uint, string memory, uint, string memory
+    ) {
+        Student memory s = students[_index];
+        return (s.rollNo, s.name, s.age, s.department);
     }
 
-    function getTotalStudents() public view returns (uint256) {
+    // Function to get total number of students
+    function getStudentCount() public view returns (uint) {
         return students.length;
     }
 
+    // Fallback function
     fallback() external payable {
-        emit FallbackCalled(msg.sender, msg.value, "Fallback function triggered!");
     }
 
+    // Receive function
     receive() external payable {
-        emit FallbackCalled(msg.sender, msg.value, "Receive function triggered!");
     }
 }

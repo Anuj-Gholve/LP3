@@ -1,0 +1,750 @@
+LP3 PRACTICAL VIVA PREPARATION
+SUBJECT: DESIGN AND ANALYSIS OF ALGORITHMS (DAA)
+Based on the five practical statements and the five uploaded source files
+
+============================================================
+HOW TO USE THIS FILE
+============================================================
+- Start with the purpose and code explanation for each practical.
+- Practise the viva questions aloud. Answers are short enough to speak in an exam.
+- Understand the algorithm and its limitations rather than memorising only definitions.
+- The explanations below follow the uploaded code. Any important issue in the submitted code is explicitly called out.
+
+============================================================
+PRACTICAL 1: ITERATIVE AND RECURSIVE FIBONACCI
+============================================================
+
+A. AIM
+Write iterative (non-recursive) and recursive programs to print Fibonacci numbers, then analyse time and space complexity.
+
+B. FIBONACCI SEQUENCE
+The sequence begins 0, 1, 1, 2, 3, 5, 8, 13, ...
+Each term after the first two is the sum of the previous two terms:
+F(0) = 0
+F(1) = 1
+F(n) = F(n-1) + F(n-2), for n >= 2
+
+C. CODE EXPLANATION — UPLOADED FILE 1.py
+
+Iterative function:
+def iterative(n):
+    a, b = 0, 1
+    for i in range(n):
+        print(a, end=" ")
+        a, b = b, a + b
+    print()
+
+- a and b hold two consecutive Fibonacci values.
+- The loop runs n times and prints the current a.
+- a, b = b, a + b updates both values: the old b becomes the new a, and their sum becomes the new b.
+- It uses a constant number of variables, so auxiliary space is O(1).
+
+Recursive function:
+def recursive(n):
+    if n <= 1:
+        return n
+    return recursive(n - 1) + recursive(n - 2)
+
+- The base case returns n when n is 0 or 1.
+- Otherwise, it calls itself for n-1 and n-2 and adds the results.
+- The same subproblems are calculated many times, making this version slow for larger n.
+
+Main program:
+- Reads the number of terms.
+- Prints n terms with iterative().
+- Then calls recursive(i) for each i from 0 to n-1.
+
+D. COMPLEXITY
+Iterative:
+- Time: O(n), because it performs one constant-work loop iteration per term.
+- Auxiliary space: O(1), because only a fixed number of variables is needed.
+
+Naive recursive function for one F(n):
+- Time: O(2^n) as a common upper-bound description; the exact growth is exponential, often described as O(phi^n).
+- Auxiliary call-stack space: O(n), because the deepest chain of calls is linear in n.
+Important nuance: the program calls recursive(i) separately for every i from 0 to n-1, so printing the whole recursive sequence is slower than computing only F(n). The total is still exponential in n.
+
+E. MUST-KNOW VIVA QUESTIONS
+
+Q1. What is the Fibonacci series?
+A. A sequence where each term after the first two is the sum of the previous two terms.
+
+Q2. What are the first two Fibonacci numbers in this code?
+A. 0 and 1.
+
+Q3. What is the base case in the recursive function?
+A. If n <= 1, return n.
+
+Q4. Why is a base case necessary?
+A. It stops recursion. Without a valid stopping condition, recursive calls could continue until a runtime error.
+
+Q5. What is recursion?
+A. A technique where a function calls itself to solve smaller instances of the same problem.
+
+Q6. What is iteration?
+A. Repeating operations using a loop, such as for or while.
+
+Q7. Why is the iterative solution faster?
+A. It computes each next term once, while the naive recursive version repeats many subproblems.
+
+Q8. What does a, b = b, a + b do?
+A. It simultaneously assigns the old b to a and the sum of the old a and b to b.
+
+Q9. What is the time complexity of the iterative version?
+A. O(n).
+
+Q10. What is its auxiliary space complexity?
+A. O(1).
+
+Q11. What is the time complexity of naive recursion?
+A. Exponential time, commonly bounded by O(2^n).
+
+Q12. What is its auxiliary space complexity?
+A. O(n), due to the recursive call stack.
+
+Q13. What is a call stack?
+A. Memory used to keep track of active function calls, including their local state and return locations.
+
+Q14. What happens for n = 0?
+A. Both loops print no Fibonacci terms. The recursive function is not called by the printing loop.
+
+Q15. What happens for n = 1?
+A. The program prints only 0 in each sequence.
+
+Q16. Is negative n validated?
+A. No. Python range(n) is empty for negative n, so no terms are printed.
+
+Q17. How can recursive Fibonacci be improved?
+A. Use memoization, dynamic programming, or an iterative method to avoid repeated calculations.
+
+Q18. What is overlapping subproblem behaviour?
+A. The same smaller problem is solved multiple times, such as calculating F(3) repeatedly while computing F(5).
+
+Q19. What is the difference between recursion and dynamic programming?
+A. Recursion describes self-calls; dynamic programming stores and reuses subproblem results, often using tabulation or memoization.
+
+Q20. Why is iterative Fibonacci O(1) space?
+A. It stores only a fixed number of values regardless of the number of terms requested.
+
+F. QUICK DRY RUN FOR n = 6
+Start a=0, b=1.
+Print 0; update to a=1, b=1.
+Print 1; update to a=1, b=2.
+Print 1; update to a=2, b=3.
+Print 2; update to a=3, b=5.
+Print 3; update to a=5, b=8.
+Print 5.
+Output: 0 1 1 2 3 5
+
+============================================================
+PRACTICAL 2: HUFFMAN ENCODING USING A GREEDY STRATEGY
+============================================================
+
+A. AIM
+Build a Huffman tree by repeatedly combining the two nodes with the smallest frequencies, then generate prefix-free binary codes for the input characters.
+
+B. IMPORTANT CONCEPTS
+- Greedy algorithm: makes the best local choice at each step.
+- Frequency: number of occurrences of a character.
+- Min-heap / priority queue: efficiently retrieves the node with the smallest frequency.
+- Huffman tree: a binary tree used to assign variable-length codes.
+- Prefix-free code: no valid character code is the prefix of another character code.
+- Frequent characters generally receive shorter codes; rare characters generally receive longer codes.
+
+C. CODE EXPLANATION — UPLOADED FILE 2.py
+
+1. import heapq
+   Imports Python's heap utilities.
+
+2. class Node:
+   Each tree node stores char, freq, left, and right.
+   - char: character for a leaf; None for a merged internal node.
+   - freq: frequency or combined frequency.
+   - left/right: child nodes.
+
+3. def __lt__(self, other):
+   Compares nodes by frequency, allowing heapq to order nodes by their frequencies.
+
+4. build_huffman_tree(char_freq):
+   - Creates a node for each character.
+   - Converts the list into a heap with heapq.heapify().
+   - While more than one node remains, removes the two lowest-frequency nodes.
+   - Creates a parent node with their combined frequency.
+   - Sets the removed nodes as its children and pushes the parent back.
+   - The remaining heap node is the root of the Huffman tree.
+
+5. generate_codes(root, current_code="", codes={}):
+   - Returns when root is None.
+   - When root.char is not None, it is a leaf; store its code.
+   - Recursively append 0 while going left and 1 while going right.
+   - Returns the character-to-code mapping.
+
+6. Main:
+   - Reads input text.
+   - Counts characters with a dictionary.
+   - Builds the tree.
+   - Generates codes.
+   - Encodes the original text by concatenating each character's code.
+
+D. COMPLEXITY
+Let n be the input text length and k be the number of distinct characters.
+- Frequency counting: O(n).
+- Building the Huffman tree with a heap: O(k log k).
+- Generating codes: O(k), apart from the total lengths of the codes.
+- Encoding the text: O(n) dictionary lookups plus output length.
+- Overall: commonly O(n + k log k), ignoring output-string construction details.
+- Space: O(k) tree/heap/dictionary space, plus O(n) for the encoded output.
+
+E. MUST-KNOW VIVA QUESTIONS
+
+Q1. What is Huffman encoding?
+A. A lossless compression technique that assigns variable-length binary codes based on character frequencies.
+
+Q2. Why is Huffman coding greedy?
+A. At each step it combines the two nodes with the smallest frequencies.
+
+Q3. Which data structure is used?
+A. A min-heap / priority queue.
+
+Q4. What does heapq.heappop() do?
+A. Removes and returns the smallest heap element.
+
+Q5. What does heapq.heappush() do?
+A. Adds an element while preserving heap ordering.
+
+Q6. Why are two smallest nodes merged?
+A. This is the greedy choice used by Huffman's algorithm to construct an optimal prefix code under the usual assumptions.
+
+Q7. What is a leaf node?
+A. A node with no children; in this program it represents a character.
+
+Q8. Why does an internal node have char=None?
+A. It represents a combined frequency, not a single input character.
+
+Q9. What does the frequency of a merged node represent?
+A. The sum of the frequencies of its two children.
+
+Q10. Why do we assign 0 to the left edge and 1 to the right edge?
+A. It is a coding convention. Reversing the convention still produces a valid code if used consistently.
+
+Q11. What is a prefix-free code?
+A. A code where no character's code is the prefix of another character's code, allowing unambiguous decoding.
+
+Q12. Is Huffman coding lossless?
+A. Yes. The encoded bits can be decoded back to the original text if the code tree or code table is known.
+
+Q13. Do frequent characters get shorter codes?
+A. Generally yes; the algorithm assigns shorter code paths to higher-frequency characters.
+
+Q14. Why use variable-length codes?
+A. To reduce the average number of bits per character compared with a fixed-length code for many frequency distributions.
+
+Q15. What does freq.get(ch, 0) + 1 do?
+A. It reads the current count, defaulting to zero, and increments it.
+
+Q16. Why does __lt__ compare frequencies?
+A. heapq needs a way to compare Node instances so the least-frequency node can be selected.
+
+Q17. What is the time complexity of building the tree?
+A. O(k log k), where k is the number of distinct characters.
+
+Q18. What is the total time complexity including reading/counting/encoding the text?
+A. Commonly O(n + k log k), where n is text length and k is the number of distinct characters.
+
+Q19. What if two nodes have equal frequencies?
+A. Either tie choice can lead to a valid Huffman tree; exact codes can differ while remaining valid.
+
+Q20. Can Huffman codes differ for the same text?
+A. Yes. Ties may be resolved differently, and left/right bit assignment is a convention. The code lengths and compression performance can still be optimal.
+
+Q21. What does codes[ch] return?
+A. The Huffman code assigned to character ch.
+
+Q22. Why is the original text encoded with join()?
+A. It concatenates the code string for each input character into one output string.
+
+Q23. What is the difference between lossless and lossy compression?
+A. Lossless compression reconstructs the original data exactly; lossy compression discards some information.
+
+Q24. What edge case exists if the input contains only one distinct character?
+A. The tree has one leaf and current_code is empty, so the program assigns that character an empty code. A practical implementation should assign a code such as "0" for this case.
+
+Q25. What edge case exists if the input is empty?
+A. build_huffman_tree returns heap[0], which raises an IndexError because the heap is empty. The code should validate empty input.
+
+F. IMPORTANT CODE QUALITY NOTE
+The uploaded function uses codes={} as a default argument. Python keeps a default mutable object between calls. This may cause unexpected reuse if generate_codes is called repeatedly without explicitly passing a fresh dictionary. A safer signature is codes=None followed by codes = {} if codes is None. Also handle empty text and the one-distinct-character case.
+
+============================================================
+PRACTICAL 3: FRACTIONAL KNAPSACK USING GREEDY METHOD
+============================================================
+
+A. AIM
+Maximise total profit within a capacity limit when fractions of items are allowed.
+
+B. CORE IDEA
+For each item, calculate:
+profit-to-weight ratio = profit / weight
+Sort items by this ratio in descending order. Take the whole item if it fits. Otherwise take only the fraction that fills the remaining capacity.
+
+C. CODE EXPLANATION — UPLOADED FILE 3.py
+
+1. ratio = [p[i] / w[i] for i in range(len(w))]
+   Computes the profit-to-weight ratio for each item.
+
+2. items = sorted(zip(ratio, w, p), reverse=True)
+   Groups each ratio with its weight and profit, then sorts in descending tuple order. Because ratio is first, the primary sort key is ratio.
+
+3. profit = 0
+   Tracks the accumulated profit.
+
+4. for r, wt, val in items:
+   Processes items from highest ratio to lowest.
+
+5. if c >= wt:
+   If the remaining capacity can hold the entire item, take it fully.
+
+6. profit += val
+   Add the whole item's profit.
+
+7. c -= wt
+   Reduce the remaining capacity by the item's weight.
+
+8. else:
+   The item is too heavy for the remaining capacity.
+
+9. profit += r * c
+   Add profit proportional to the remaining capacity. Since r is profit per unit weight, ratio × remaining capacity gives the fractional profit.
+
+10. break
+    Capacity is full, so no further item can be taken.
+
+D. IMPORTANT CORRECTION TO THE UPLOADED FILE'S COMMENTS
+For weights [10, 20, 30], profits [60, 100, 120], capacity 50:
+- Ratios are 6, 5, and 4.
+- Take weight 10/profit 60.
+- Take weight 20/profit 100.
+- Take 20 of the 30-weight item, receiving profit 120 × (20/30) = 80.
+- Total profit = 60 + 100 + 80 = 240.
+Therefore the algorithm's output of 240.0 is correct for fractional knapsack. The later claim in the uploaded comments that the same example's result is 220.0 is incorrect; 220 is the best result for the corresponding 0/1 example, not this fractional example.
+
+E. COMPLEXITY
+For n items:
+- Computing ratios: O(n).
+- Sorting: O(n log n).
+- Processing sorted items: O(n).
+- Total time: O(n log n).
+- Auxiliary space: O(n) for ratios and sorted items.
+
+F. MUST-KNOW VIVA QUESTIONS
+
+Q1. What is the fractional knapsack problem?
+A. A problem where items can be taken wholly or in fractions to maximise profit within a weight capacity.
+
+Q2. Which strategy is used?
+A. Greedy strategy.
+
+Q3. What is the greedy choice?
+A. Select the available item with the highest profit-to-weight ratio.
+
+Q4. Why use profit/weight ratio?
+A. It measures the profit gained per unit of capacity used.
+
+Q5. Can an item be divided?
+A. Yes, fractions are allowed in fractional knapsack.
+
+Q6. What happens when the next item does not fit completely?
+A. Take the fraction that fills the remaining capacity and stop.
+
+Q7. What is the time complexity?
+A. O(n log n), mainly due to sorting.
+
+Q8. What is the space complexity?
+A. O(n) for the extra ratio and item lists.
+
+Q9. Is greedy optimal for fractional knapsack?
+A. Yes, sorting by profit-to-weight ratio gives an optimal solution under the usual positive-weight assumptions.
+
+Q10. Is greedy by ratio guaranteed to solve 0/1 knapsack optimally?
+A. No. In 0/1 knapsack, items cannot be split, so the ratio-greedy strategy can miss the optimal combination.
+
+Q11. What does zip(ratio, w, p) do?
+A. It groups corresponding ratio, weight, and profit elements into tuples.
+
+Q12. What does sorted(..., reverse=True) do?
+A. Sorts the tuples in descending order, primarily by ratio.
+
+Q13. Why multiply r by c in the fractional case?
+A. r is profit per unit weight and c is the remaining weight capacity, so r*c is the proportional profit for that fraction.
+
+Q14. What is the role of break?
+A. It exits the loop after the capacity has been filled.
+
+Q15. What if an item's weight is zero?
+A. The ratio calculation divides by zero. The code assumes positive item weights and does not validate this case.
+
+Q16. What if weights and profits have different lengths?
+A. The code may fail or silently mismatch data because it does not validate equal lengths. Inputs should be validated.
+
+Q17. What if capacity is zero?
+A. The algorithm should return zero profit; this code may enter the fractional branch and add zero, so it prints 0.0 for ordinary positive weights.
+
+Q18. Why is this called an optimisation problem?
+A. It seeks the maximum possible profit subject to a capacity constraint.
+
+============================================================
+PRACTICAL 4: 0/1 KNAPSACK USING DYNAMIC PROGRAMMING
+============================================================
+
+A. AIM
+Find the maximum total profit when each item can be selected at most once and the total weight must not exceed the capacity.
+
+B. DIFFERENCE BETWEEN 0/1 AND FRACTIONAL KNAPSACK
+- 0/1 knapsack: each item is either selected (1) or not selected (0); no fractions.
+- Fractional knapsack: an item may be divided.
+- The uploaded 0/1 solution uses dynamic programming, not branch and bound.
+
+C. CODE EXPLANATION — UPLOADED FILE 4.py
+
+1. n = len(w)
+   Stores the number of items.
+
+2. dp = [[0] * (c + 1) for _ in range(n + 1)]
+   Creates a table with n+1 rows and c+1 columns. dp[i][j] is the best profit using the first i items with capacity j.
+
+3. for i in range(1, n + 1):
+   Iterates through items. Python indexes the original arrays from zero, so item i-1 is used.
+
+4. for j in range(1, c + 1):
+   Iterates through capacities from 1 to c.
+
+5. if w[i - 1] <= j:
+   Checks whether the current item fits the current capacity.
+
+6. dp[i][j] = max(p[i - 1] + dp[i - 1][j - w[i - 1]], dp[i - 1][j])
+   Compares two choices:
+   - Include the item: its profit plus the best value for the remaining capacity using earlier items.
+   - Exclude the item: use the best value without this item.
+   Store the larger value.
+
+7. else:
+   If the item is too heavy, carry forward dp[i - 1][j].
+
+8. print("Maximum Profit:", dp[n][c])
+   The bottom-right cell gives the maximum profit for all n items and full capacity c.
+
+D. COMPLEXITY
+Let n be number of items and C be capacity:
+- Time: O(nC), because each of n items is processed for each capacity.
+- Space: O(nC) for the two-dimensional DP table.
+This is called pseudo-polynomial time because complexity depends on the numeric capacity C, not merely the number of bits needed to represent C.
+
+E. MUST-KNOW VIVA QUESTIONS
+
+Q1. What is 0/1 knapsack?
+A. A problem in which each item can be either included once or excluded, with the goal of maximising profit under a weight limit.
+
+Q2. Which technique does the uploaded code use?
+A. Dynamic programming.
+
+Q3. What does dp[i][j] represent?
+A. Maximum profit using the first i items with capacity j.
+
+Q4. Why does the DP table have n+1 rows?
+A. Row zero represents using zero items; the remaining rows represent the first i items.
+
+Q5. Why does the table have c+1 columns?
+A. Column zero represents zero capacity, and columns 1 through c represent each capacity value.
+
+Q6. Why are the table values initially zero?
+A. With zero items or zero capacity, the maximum profit is zero under the standard non-negative-weight/non-negative-profit formulation.
+
+Q7. What are the two choices for each item?
+A. Include it if it fits, or exclude it.
+
+Q8. Explain the recurrence.
+A. If weight w[i-1] fits in capacity j, take the maximum of including it and excluding it. Otherwise, use the result from excluding it.
+
+Q9. Why use i-1 to access w and p?
+A. The DP table uses rows starting at 1 to represent item counts, while Python lists start at index 0.
+
+Q10. What is the time complexity?
+A. O(nC), where C is capacity.
+
+Q11. What is the space complexity?
+A. O(nC) for the table.
+
+Q12. What does dp[n][c] mean?
+A. The maximum profit achievable using all n items with capacity c.
+
+Q13. Why is dynamic programming suitable here?
+A. The problem has overlapping subproblems and optimal substructure.
+
+Q14. What is optimal substructure?
+A. An optimal solution can be built from optimal solutions to smaller subproblems.
+
+Q15. What are overlapping subproblems?
+A. The same smaller states are needed repeatedly; dynamic programming stores their answers.
+
+Q16. Why is it called 0/1?
+A. Each item has only two choices: take it (1) or leave it (0).
+
+Q17. What is the difference between dynamic programming and greedy?
+A. Dynamic programming compares and stores solutions to subproblems; greedy makes a local choice at each step and does not generally revisit it.
+
+Q18. Is the DP solution polynomial in the input bit length?
+A. Not necessarily. O(nC) is pseudo-polynomial because C is a numeric value that may require only log C bits to represent.
+
+Q19. What happens if an item is heavier than the current capacity?
+A. It cannot be included, so the table copies the previous row's value.
+
+Q20. Can the space complexity be reduced?
+A. Yes. A one-dimensional DP array can reduce space to O(C), iterating capacities downward for each item to prevent using the same item multiple times.
+
+Q21. Why must a one-dimensional 0/1 DP iterate capacities downward?
+A. Descending order ensures the current item is not reused in the same iteration.
+
+Q22. What is branch and bound?
+A. An optimisation technique that explores candidate solutions and uses bounds to prune branches that cannot beat the current best solution.
+
+Q23. Does the uploaded code use branch and bound?
+A. No. It uses dynamic programming.
+
+Q24. What is the output for weights 10,20,30; profits 60,100,120; capacity 50?
+A. 220, by selecting the items with weights 20 and 30 and profits 100 and 120.
+
+Q25. What is a limitation of this implementation?
+A. It allocates O(nC) table cells, which can use substantial memory when capacity C is very large.
+
+============================================================
+PRACTICAL 5: N-QUEENS USING BACKTRACKING WITH FIRST QUEEN FIXED
+============================================================
+
+A. AIM
+Place N queens on an N×N chessboard so that no two queens attack each other. The uploaded program fixes the first queen at board[0][0] and uses backtracking to place the remaining queens.
+
+B. RULES
+Queens attack along:
+- The same row.
+- The same column.
+- Either diagonal.
+
+The code places exactly one queen per row. It therefore checks earlier rows for column and diagonal conflicts when deciding where to place the next queen.
+
+C. CODE EXPLANATION — UPLOADED FILE 5.py
+
+1. def safe(board, row, col, n):
+   Checks whether a queen can safely be placed at (row, col).
+
+2. for i in range(row):
+   Checks all rows above the current row, where queens may already have been placed.
+
+3. if board[i][col] == 1:
+   Rejects the position if a queen is already in the same column.
+
+4. if col - (row - i) >= 0 and board[i][col - (row - i)] == 1:
+   Checks the upper-left diagonal. The bounds check prevents a negative column index.
+
+5. if col + (row - i) < n and board[i][col + (row - i)] == 1:
+   Checks the upper-right diagonal. The bounds check ensures the column is less than n.
+
+6. return True
+   If no conflict is found, the position is safe.
+
+7. def solve(board, row, n):
+   Recursively tries to place a queen in the current row.
+
+8. if row == n:
+   Base case: all rows have received queens, so a solution has been found.
+
+9. for col in range(n):
+   Tries each column in the current row.
+
+10. if safe(...):
+    Continues only if the candidate position does not conflict with earlier queens.
+
+11. board[row][col] = 1
+    Places a queen.
+
+12. if solve(board, row + 1, n):
+    Recursively attempts to solve the next row. If it succeeds, return True.
+
+13. board[row][col] = 0
+    If later placement fails, remove the queen and try another column. This is the backtracking step.
+
+14. return False
+    No safe column worked for this row.
+
+15. board = [[0] * n for _ in range(n)]
+    Creates an n×n matrix filled with zeroes. A 0 means empty and a 1 means queen.
+
+16. board[0][0] = 1
+    Fixes the first queen in the top-left corner.
+
+17. solve(board, 1, n)
+    Starts solving from row 1 because row 0 already has a queen.
+
+D. IMPORTANT LIMITATION IN THE UPLOADED CODE
+The first queen is fixed at the top-left corner. For N > 1, no solution can exist with that fixed position: the queen at (0,0) attacks every square in the first column and the main diagonal, and the remaining rows cannot all be filled safely. In particular, the standard N-Queens problem has solutions for many N values, but this extra fixed-corner constraint makes the submitted version fail for N > 1. For N=1, the fixed queen is already a valid solution.
+If the practical statement literally requires the first queen to be fixed, the chosen position should be selected carefully; fixing it at column 0 in row 0 is not a viable choice for N > 1. Do not claim the uploaded code solves general N-Queens successfully for arbitrary N.
+
+E. COMPLEXITY
+- Backtracking N-Queens has exponential worst-case search time. A common upper-bound description is O(N!), with pruning and the precise implementation affecting the search.
+- The board uses O(N²) space.
+- The recursion depth is O(N).
+- The provided safe() function scans earlier rows, taking O(N) time per safety check.
+
+F. MUST-KNOW VIVA QUESTIONS
+
+Q1. What is the N-Queens problem?
+A. Place N queens on an N×N chessboard so that no two queens attack each other.
+
+Q2. Which technique does the code use?
+A. Backtracking.
+
+Q3. What is backtracking?
+A. A search technique that builds a candidate solution and undoes a choice when it cannot lead to a valid solution.
+
+Q4. Why is a queen represented by 1?
+A. The board uses 1 to mark a queen and 0 for an empty square.
+
+Q5. What does safe() check?
+A. It checks the same column, upper-left diagonal, and upper-right diagonal in earlier rows.
+
+Q6. Why are only earlier rows checked?
+A. The algorithm places one queen per row from top to bottom, so future rows have not yet been filled.
+
+Q7. Why does solve() stop when row == n?
+A. It means all N rows have a queen and the algorithm has found a complete arrangement.
+
+Q8. Why does the code set board[row][col] = 0?
+A. It removes a queen after a failed recursive attempt, allowing another candidate column to be tested.
+
+Q9. What is the role of the recursive call solve(board, row + 1, n)?
+A. It tries to place queens in the remaining rows.
+
+Q10. What is the time complexity?
+A. Exponential in the worst case; commonly described as O(N!) for the backtracking search.
+
+Q11. What is the space complexity?
+A. O(N²) for the board, plus O(N) recursion stack.
+
+Q12. Why is this not a greedy algorithm?
+A. It may undo previous choices and explore alternatives rather than permanently accepting each local choice.
+
+Q13. Why is the fixed first queen important?
+A. It constrains the search space and can change whether a solution exists for the selected position.
+
+Q14. What is the issue with board[0][0] = 1 in this program?
+A. For N > 1, fixing the queen at the top-left corner makes the remaining full placement impossible. The code therefore reports no solution for those sizes.
+
+Q15. What happens when N=1?
+A. The one queen at (0,0) is a valid solution; solve() is called with row=1, which equals n, so it returns True.
+
+Q16. What happens if N=2 or N=3?
+A. No N-Queens solution exists for the standard problem at those sizes. With the fixed-corner placement, the search also fails for these sizes.
+
+Q17. What happens for N=4 with the first queen fixed at (0,0)?
+A. The program cannot complete a solution with that fixed position. Standard N=4 solutions exist, but they require the first-row queen to be in a different column.
+
+Q18. What is a diagonal conflict?
+A. Two queens share a diagonal. For positions (r1,c1) and (r2,c2), they share a diagonal when abs(r1-r2) == abs(c1-c2).
+
+Q19. What does return False mean in solve()?
+A. No valid column was found for the current row under the current partial placement.
+
+Q20. How could the program be changed to solve the general N-Queens problem?
+A. Do not force board[0][0] = 1; start solving at row 0, allowing the first queen to be placed in any safe column.
+
+Q21. Can symmetry reduce the search?
+A. Yes. Symmetry can reduce redundant searches, although the submitted code does not use that optimisation.
+
+Q22. Why does the code use a matrix rather than a list of column positions?
+A. A matrix makes the board arrangement easy to display, though a list of column positions can be more memory-efficient.
+
+============================================================
+CROSS-PRACTICAL DAA THEORY
+============================================================
+
+Q1. What is an algorithm?
+A. A finite, ordered set of steps to solve a problem.
+
+Q2. What is time complexity?
+A. A description of how running time grows with input size.
+
+Q3. What is space complexity?
+A. A description of how memory use grows with input size.
+
+Q4. What is Big-O notation?
+A. An asymptotic upper-bound notation used to describe growth.
+
+Q5. What is a greedy algorithm?
+A. An algorithm that makes a locally best choice at each step according to a selection rule.
+
+Q6. What is dynamic programming?
+A. A technique that stores subproblem results to avoid recomputation and combine them into a solution.
+
+Q7. What is backtracking?
+A. A search approach that abandons a partial solution when it cannot lead to a valid complete solution.
+
+Q8. What is a priority queue?
+A. A data structure that removes elements according to priority, such as smallest frequency in Huffman coding.
+
+Q9. What is a min-heap?
+A. A heap where the smallest element is at the root and can be retrieved efficiently.
+
+Q10. What is an optimisation problem?
+A. A problem that asks for the best solution according to an objective, subject to constraints.
+
+Q11. What is the difference between feasible and optimal?
+A. A feasible solution satisfies all constraints; an optimal solution is the best feasible solution under the objective.
+
+Q12. Which of these practicals uses greedy strategy?
+A. Huffman encoding and fractional knapsack.
+
+Q13. Which practical uses dynamic programming?
+A. The submitted 0/1 knapsack program.
+
+Q14. Which practical uses backtracking?
+A. N-Queens.
+
+Q15. Which practical compares recursion and iteration?
+A. Fibonacci.
+
+Q16. What is an asymptotic analysis?
+A. Analysis of algorithm growth for large input sizes, ignoring constant factors and lower-order terms.
+
+============================================================
+ONE-MINUTE RAPID REVISION
+============================================================
+
+FIBONACCI
+- Iterative time: O(n); auxiliary space: O(1).
+- Naive recursive time: exponential, commonly O(2^n); stack: O(n).
+- Base cases: F(0)=0, F(1)=1.
+
+HUFFMAN
+- Greedy algorithm; min-heap; combine two smallest frequencies.
+- Prefix-free, lossless variable-length coding.
+- Build tree: O(k log k); k = number of distinct characters.
+- Uploaded code needs handling for empty text and one unique character.
+
+FRACTIONAL KNAPSACK
+- Sort by profit/weight ratio descending.
+- Fractions allowed.
+- Time: O(n log n).
+- Given weights 10,20,30; profits 60,100,120; capacity 50, fractional optimum is 240.
+
+0/1 KNAPSACK
+- Items cannot be split.
+- DP recurrence compares include vs exclude.
+- Time O(nC); space O(nC).
+- Given weights 10,20,30; profits 60,100,120; capacity 50, optimum is 220.
+
+N-QUEENS
+- Backtracking; one queen per row.
+- Check column and both diagonals.
+- Undo a placement when recursion fails.
+- Submitted code fixes queen at (0,0), which prevents a solution for N > 1. This is an important implementation limitation to understand.
+
+END OF DAA VIVA NOTES
