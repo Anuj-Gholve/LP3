@@ -1,0 +1,597 @@
+LP3 MACHINE LEARNING (ML) PRACTICAL VIVA PREPARATION
+Based on the uploaded notebooks: A1, A2, A4, A5 and A6, plus the practical statements provided.
+Note: An A3 notebook was not included in the uploaded files. The Bank Customer Churn section below is therefore based on the practical statement, not on a review of your actual code.
+
+============================================================
+HOW TO USE THIS FILE
+============================================================
+For each practical, revise:
+1. Aim and core idea
+2. Your code flow
+3. Important viva questions and answers
+4. Metrics / formulas
+5. Common mistakes and improvement points
+
+============================================================
+PRACTICAL 1 — UBER FARE PREDICTION
+Linear Regression vs Random Forest Regression
+============================================================
+
+AIM
+Predict the fare_amount of an Uber ride from pickup-related information, preprocess the dataset, detect fare outliers, check correlation, train Linear Regression and Random Forest Regression, and compare their performance.
+
+YOUR NOTEBOOK'S CODE FLOW
+1. Import NumPy, pandas, Matplotlib, Seaborn and scikit-learn tools.
+2. Read uber.csv with pd.read_csv().
+3. Inspect the data with head(), info() and isnull().sum().
+4. Remove rows with missing values using df.dropna(inplace=True).
+5. Drop columns "Unnamed: 0" and "key" if present.
+6. Convert pickup_datetime to datetime format.
+7. Extract hour, day, month and year from pickup_datetime.
+8. Plot fare_amount to inspect its distribution.
+9. Use the IQR rule to remove fare_amount outliers.
+10. Plot a correlation heatmap.
+11. Use all remaining columns except fare_amount and pickup_datetime as X; fare_amount is y.
+12. Split into training and test sets with test_size=0.2 and random_state=42.
+13. Train LinearRegression and RandomForestRegressor(n_estimators=50, random_state=42, n_jobs=-1).
+14. Compare R², RMSE and MAE.
+
+KEY CONCEPTS
+- Regression predicts a continuous numeric value.
+- X/features: input variables used for prediction.
+- y/target: fare_amount.
+- IQR = Q3 - Q1.
+- Lower outlier boundary = Q1 - 1.5 × IQR.
+- Upper outlier boundary = Q3 + 1.5 × IQR.
+- A correlation coefficient indicates linear association, usually between -1 and +1.
+- Linear Regression models a linear relationship between features and target.
+- Random Forest Regression averages predictions from many decision trees.
+- random_state makes the split/model randomness reproducible.
+- n_estimators=50 means 50 trees in the random forest.
+- n_jobs=-1 allows use of available CPU cores.
+
+VIVA QUESTIONS AND ANSWERS
+Q1. What is the aim of this practical?
+A. To predict Uber fare and compare Linear Regression with Random Forest Regression using regression metrics.
+
+Q2. Why is this a regression problem?
+A. The output, fare_amount, is a continuous numerical value.
+
+Q3. What is preprocessing?
+A. Cleaning and transforming raw data into a form suitable for analysis and modelling.
+
+Q4. Why do we use df.info()?
+A. To inspect column names, data types, non-null counts and memory usage.
+
+Q5. Why check missing values?
+A. Many models cannot accept missing values directly, and missing data can distort results.
+
+Q6. What does dropna() do?
+A. It removes rows containing missing values by default. This can reduce the dataset, so the amount of data removed should be checked.
+
+Q7. Why convert pickup_datetime to datetime?
+A. To correctly extract date/time components such as hour, day, month and year.
+
+Q8. Why drop key and Unnamed: 0?
+A. They are generally identifiers/index-like fields and are not meaningful predictors of fare. The errors="ignore" argument avoids an error if a column is absent.
+
+Q9. What is an outlier?
+A. An observation unusually far from the rest of the data.
+
+Q10. Explain the IQR method.
+A. Calculate Q1 and Q3, find IQR=Q3-Q1, then flag values below Q1-1.5×IQR or above Q3+1.5×IQR as potential outliers.
+
+Q11. Why might fare outliers be removed?
+A. Extremely large or invalid fares can affect the model and metrics. But genuine long-distance/high-cost rides may also be outliers, so they should not be removed blindly.
+
+Q12. What does correlation +1 mean?
+A. Perfect positive linear association. -1 means perfect negative linear association, and 0 means no linear association.
+
+Q13. Does correlation prove causation?
+A. No. Correlation describes association, not cause and effect.
+
+Q14. What is Linear Regression?
+A. A model that estimates a target as a linear combination of input features.
+
+Q15. What is Random Forest Regression?
+A. An ensemble model that trains multiple decision trees and combines their predictions, commonly by averaging.
+
+Q16. What is the difference between Linear Regression and Random Forest?
+A. Linear Regression fits a linear relationship; Random Forest can learn more complex nonlinear patterns but is often less interpretable and can use more resources.
+
+Q17. Why use train_test_split?
+A. To evaluate performance on data not used to fit the model.
+
+Q18. What does test_size=0.2 mean?
+A. 20% of the data is reserved for testing and 80% for training.
+
+Q19. What is R²?
+A. A score comparing the model with predicting the target mean. A value closer to 1 is generally better; 0 means performance similar to the mean baseline, and negative values can occur.
+
+Q20. What is RMSE?
+A. Root Mean Squared Error: sqrt(mean((actual-predicted)^2)). It is in the same units as the target and penalizes large errors more strongly.
+
+Q21. What is MAE?
+A. Mean Absolute Error: mean(abs(actual-predicted)). It measures average absolute prediction error in target units.
+
+Q22. Which model is better?
+A. Compare on the same test set. Prefer higher R² and lower RMSE/MAE, while also considering runtime and generalization. Do not claim a winner without the actual scores.
+
+IMPORTANT CODE REVIEW NOTES
+- In code cell 15, the line labelled "RMSE" prints mean_squared_error(...) directly. That is MSE, not RMSE. Use np.sqrt(mean_squared_error(y_test, y_pred_lr)) and similarly for Random Forest. The results DataFrame later in the notebook correctly calculates RMSE using np.sqrt().
+- The code drops missing rows and fare outliers, but does not visibly validate impossible latitude/longitude values, negative fares, or unrealistic passenger counts. These checks can improve data quality.
+- The target is fare_amount; ensure it is excluded from X to avoid target leakage. Your notebook does this.
+- pickup_datetime is excluded from X after its components are extracted, which avoids passing the raw datetime column to the model.
+
+FORMULAS
+IQR = Q3 - Q1
+Lower boundary = Q1 - 1.5(IQR)
+Upper boundary = Q3 + 1.5(IQR)
+MSE = (1/n) Σ(yᵢ - ŷᵢ)²
+RMSE = sqrt(MSE)
+MAE = (1/n) Σ|yᵢ - ŷᵢ|
+
+============================================================
+PRACTICAL 2 — EMAIL SPAM DETECTION
+K-Nearest Neighbors vs Linear Support Vector Classifier
+============================================================
+
+AIM
+Classify emails as spam or not spam using the emails.csv dataset and compare KNN and Linear SVM classification performance.
+
+YOUR NOTEBOOK'S CODE FLOW
+1. Read emails.csv.
+2. Inspect the data and check missing values.
+3. Drop the "Email No." identifier column.
+4. Set X to all feature columns except Prediction; set y=Prediction.
+5. Split into training/test data with test_size=0.2 and random_state=42.
+6. Train KNeighborsClassifier(n_neighbors=5).
+7. Train LinearSVC().
+8. Predict test labels and print accuracy and classification_report for both models.
+
+KEY CONCEPTS
+- Binary classification has two classes: spam and not spam.
+- In this dataset, Prediction is the target label; confirm the dataset's label encoding before interpreting 0 and 1.
+- KNN classifies a sample using labels of its nearest training examples.
+- Linear SVC learns a separating hyperplane with a large margin.
+- Precision = TP/(TP+FP).
+- Recall = TP/(TP+FN).
+- F1-score = 2×precision×recall/(precision+recall).
+- Support is the number of true examples in each class in the evaluation set.
+
+VIVA QUESTIONS AND ANSWERS
+Q1. What is spam detection?
+A. A binary classification task that predicts whether an email is spam or legitimate.
+
+Q2. What is classification?
+A. Predicting a discrete class or category rather than a continuous numeric value.
+
+Q3. Why drop Email No.?
+A. It appears to be an identifier, not meaningful content for classification. An arbitrary ID may mislead the model.
+
+Q4. What is KNN?
+A. A supervised, instance-based algorithm that predicts a class from the majority label among its k nearest training points.
+
+Q5. What does n_neighbors=5 mean?
+A. KNN considers the five nearest training examples when predicting a class.
+
+Q6. How does KNN measure distance?
+A. Common choices include Euclidean and Manhattan distance. The default metric for this scikit-learn classifier is Minkowski with p=2, equivalent to Euclidean distance.
+
+Q7. Why is feature scaling important for KNN?
+A. KNN uses distances, so features with larger numeric scales can dominate. The current notebook does not scale X; scaling should be considered if features have different ranges.
+
+Q8. What is SVM?
+A. Support Vector Machine, a supervised algorithm that finds a decision boundary with a large margin between classes.
+
+Q9. What is LinearSVC?
+A. A linear support-vector classifier that learns a linear decision boundary.
+
+Q10. What are support vectors?
+A. Training examples that lie closest to the decision boundary and strongly influence the margin.
+
+Q11. What is a hyperplane?
+A. A decision boundary; in two dimensions it is a line, and in higher dimensions it is a hyperplane.
+
+Q12. What is accuracy?
+A. Correct predictions divided by all predictions. It may be misleading when classes are imbalanced.
+
+Q13. Why use classification_report?
+A. It provides precision, recall, F1-score and support for each class, plus summary averages.
+
+Q14. Why use random_state=42?
+A. To make the random train/test split reproducible.
+
+Q15. How should we compare KNN and SVM?
+A. Compare accuracy and per-class precision, recall and F1-score on the same test split. For spam filtering, false negatives and false positives can have different costs.
+
+Q16. What is a false positive here?
+A. A legitimate email incorrectly classified as spam.
+
+Q17. What is a false negative here?
+A. A spam email incorrectly classified as legitimate.
+
+Q18. Why might SVM perform well on word-frequency features?
+A. Text representations often have many dimensions, and a linear boundary can work well in high-dimensional feature spaces.
+
+IMPORTANT CODE REVIEW NOTES
+- The notebook does not scale features before KNN. StandardScaler or another suitable scaling method can be tested; fit the scaler only on training data, then transform test data.
+- LinearSVC can sometimes produce a convergence warning. If that occurs, check feature scaling and increase max_iter where appropriate.
+- Do not assume that label 1 means spam without checking the dataset documentation or values.
+- A fair comparison uses the same train/test split for both models, as this notebook does.
+
+============================================================
+PRACTICAL 3 — BANK CUSTOMER CHURN USING A NEURAL NETWORK
+STATEMENT PROVIDED; A3 NOTEBOOK WAS NOT UPLOADED
+============================================================
+
+AIM
+Build a neural-network-based binary classifier to predict whether a bank customer will leave (churn) within the next six months.
+
+IMPORTANT SOURCE NOTE
+No A3 notebook/code was among the uploaded files. The following is a practical-statement-based revision guide, not a claim about your exact implementation.
+
+EXPECTED WORKFLOW
+1. Read the bank churn dataset.
+2. Identify the target, commonly Exited, and separate it from the input features.
+3. Remove identifier columns such as RowNumber, CustomerId and Surname if they are not useful predictors.
+4. Encode categorical features such as Geography and Gender.
+5. Split data into training and test sets.
+6. Normalize/scale numeric inputs; fit the scaler on training data only and apply it to the test data.
+7. Build a neural network with an input layer, one or more hidden layers, and an output layer.
+8. For binary classification, a common output is one neuron with sigmoid activation; a common loss is binary cross-entropy.
+9. Train on training data, evaluate on held-out test data, print accuracy and confusion matrix.
+10. Consider improvements such as class weighting, tuning the number of neurons/layers, learning rate, batch size, epochs, early stopping and threshold selection.
+
+VIVA QUESTIONS AND ANSWERS
+Q1. What is customer churn?
+A. When a customer stops using a company's service or closes their relationship with the company.
+
+Q2. Is churn prediction regression or classification?
+A. Binary classification: churn or no churn.
+
+Q3. What is a neural network?
+A. A model made of interconnected computational units (neurons) arranged in layers that learn patterns from data.
+
+Q4. What are the main layers?
+A. Input layer, hidden layer(s), and output layer.
+
+Q5. What is an activation function?
+A. A function applied to a neuron's weighted input to introduce nonlinearity. Examples include ReLU and sigmoid.
+
+Q6. Why use sigmoid in the output layer?
+A. It maps the output to a value between 0 and 1, which can be interpreted as a predicted probability for the positive class.
+
+Q7. What is binary cross-entropy?
+A. A loss function commonly used to train binary classifiers by penalizing incorrect predicted probabilities.
+
+Q8. What is an epoch?
+A. One complete pass through the training dataset.
+
+Q9. What is batch size?
+A. The number of training examples processed before a parameter update.
+
+Q10. Why normalize data?
+A. Features on very different scales can make neural-network optimization harder or less stable. Scaling often helps training.
+
+Q11. Why split training and test data?
+A. To evaluate how the model performs on unseen examples.
+
+Q12. What is a confusion matrix?
+A. A table of true positives, true negatives, false positives and false negatives.
+
+Q13. What is overfitting?
+A. When a model learns training-specific patterns/noise and performs worse on unseen data.
+
+Q14. How can overfitting be reduced?
+A. Early stopping, dropout, regularization, simpler architecture, more data, and appropriate validation.
+
+Q15. What does accuracy tell us?
+A. The proportion of correct predictions. If churn is imbalanced, accuracy alone may hide poor detection of churners; also examine precision, recall, F1 and confusion matrix.
+
+Q16. Why remove CustomerId or Surname?
+A. They are identifiers and usually do not provide generalizable predictive information. This should be validated rather than assumed blindly.
+
+Q17. Why encode Geography and Gender?
+A. Most neural-network implementations require numeric input. Categorical variables must be represented numerically, commonly using one-hot encoding for nominal categories.
+
+Q18. What is data leakage?
+A. When information unavailable at prediction time or information from the test set influences training, leading to overly optimistic evaluation.
+
+============================================================
+PRACTICAL 4 — GRADIENT DESCENT
+Minimize y = (x + 3)² starting from x = 2
+============================================================
+
+YOUR NOTEBOOK'S CODE FLOW
+1. Define f(x)=(x+3)**2.
+2. Define derivative f'(x)=2*(x+3).
+3. Initialize x=2.0, learning_rate=0.1 and iterations=100.
+4. Repeat: x = x - learning_rate * derivative(x).
+5. Save each x in history.
+6. Plot the function and the gradient-descent steps.
+
+MATHEMATICAL IDEA
+For f(x)=(x+3)²:
+f'(x)=2(x+3)
+Set derivative to zero: 2(x+3)=0, so x=-3.
+At x=-3, y=0, which is the global minimum for this parabola.
+
+VIVA QUESTIONS AND ANSWERS
+Q1. What is Gradient Descent?
+A. An iterative optimization algorithm that updates parameters in the direction opposite the gradient to reduce the objective function.
+
+Q2. What is a gradient?
+A. The derivative in one dimension, or vector of partial derivatives in multiple dimensions, describing the direction of steepest increase.
+
+Q3. Why subtract the derivative?
+A. The derivative points toward increasing values locally; subtracting it moves toward decreasing values.
+
+Q4. What is the learning rate?
+A. The step-size multiplier controlling how far each update moves.
+
+Q5. What happens if the learning rate is too large?
+A. Updates may overshoot the minimum or diverge.
+
+Q6. What happens if the learning rate is too small?
+A. Convergence may be very slow.
+
+Q7. What is the update rule?
+A. x_new = x_old - learning_rate × f'(x_old).
+
+Q8. What is the derivative of (x+3)²?
+A. 2(x+3), using the chain rule.
+
+Q9. What is the minimum point?
+A. x=-3 and y=0.
+
+Q10. Why start from x=2?
+A. It is the initial point from which the iterative updates begin; the algorithm moves toward the minimum.
+
+Q11. What is convergence?
+A. When successive updates or the objective value become sufficiently close to a stable solution.
+
+Q12. Is gradient descent guaranteed to find the global minimum?
+A. Not for every function. It depends on the function's shape, learning rate and initialization. For this convex quadratic, it converges to the global minimum with a suitable learning rate.
+
+Q13. What does history store?
+A. The sequence of x values generated during optimization, used to visualize the steps.
+
+Q14. Why plot the steps?
+A. To show how the algorithm moves along the curve toward the minimum.
+
+============================================================
+PRACTICAL 5 — DIABETES CLASSIFICATION USING KNN
+============================================================
+
+AIM
+Use K-Nearest Neighbors to predict the Outcome in diabetes.csv and calculate confusion matrix, accuracy, error rate, precision and recall.
+
+YOUR NOTEBOOK'S CODE FLOW
+1. Read diabetes.csv.
+2. Set X to all columns except Outcome; set y=Outcome.
+3. Split data with test_size=0.2 and random_state=42.
+4. Standardize X using StandardScaler.
+5. Fit StandardScaler on X_train and transform X_train and X_test.
+6. Train KNeighborsClassifier(n_neighbors=5).
+7. Predict test labels.
+8. Print confusion matrix, accuracy, error rate, precision and recall.
+
+KEY METRICS
+- Confusion matrix for binary classification is typically arranged as [[TN, FP], [FN, TP]] when labels are ordered [0, 1].
+- Accuracy = (TP+TN)/(TP+TN+FP+FN).
+- Error rate = 1 - accuracy.
+- Precision = TP/(TP+FP): among predicted positives, how many are actually positive?
+- Recall = TP/(TP+FN): among actual positives, how many were found?
+- zero_division=0 tells scikit-learn to return 0 for precision/recall if the denominator is zero, rather than warning or returning an undefined value.
+
+VIVA QUESTIONS AND ANSWERS
+Q1. Why is this classification?
+A. Outcome is a class label, usually 0 or 1, rather than a continuous value.
+
+Q2. What is KNN?
+A. It predicts the label based on the majority class among the nearest training examples.
+
+Q3. Why choose k=5?
+A. It is a chosen hyperparameter. The best k should ideally be selected using validation or cross-validation, not assumed to be optimal.
+
+Q4. Why scale the data?
+A. KNN uses distance, so features with large numeric ranges could dominate the distance if not scaled.
+
+Q5. What does StandardScaler do?
+A. It transforms each feature using training-set mean and standard deviation, typically giving mean approximately 0 and standard deviation approximately 1.
+
+Q6. Why fit the scaler only on training data?
+A. To avoid leaking information from the test set into preprocessing.
+
+Q7. What is a true positive?
+A. A person with positive Outcome correctly predicted as positive.
+
+Q8. What is a true negative?
+A. A person with negative Outcome correctly predicted as negative.
+
+Q9. What is a false positive?
+A. A negative case incorrectly predicted positive.
+
+Q10. What is a false negative?
+A. A positive case incorrectly predicted negative.
+
+Q11. Difference between precision and recall?
+A. Precision measures correctness among predicted positives; recall measures the fraction of actual positives detected.
+
+Q12. What is error rate?
+A. The fraction of incorrect predictions, equal to 1-accuracy.
+
+Q13. Why not rely only on accuracy?
+A. It can be misleading when classes are imbalanced or when false negatives have a high cost.
+
+Q14. What does random_state=42 do?
+A. Makes the train/test split reproducible.
+
+Q15. What improvement can be considered?
+A. Tune k using cross-validation, test alternative distance metrics/weights, and report F1-score or ROC-AUC as appropriate.
+
+PRACTICAL CAUTION
+In medical datasets, zero values in fields such as glucose or blood pressure may represent missing/invalid measurements rather than realistic values. Inspect the dataset documentation before deciding how to handle them.
+
+============================================================
+PRACTICAL 6 — CUSTOMER SALES CLUSTERING
+K-Means, Hierarchical Clustering and Elbow Method
+============================================================
+
+AIM
+Cluster sales_data_sample.csv and use the elbow method to help choose the number of clusters.
+
+YOUR NOTEBOOK'S CODE FLOW
+1. Read sales_data_sample.csv with encoding="latin1".
+2. Inspect rows and missing values.
+3. Select numeric columns and drop columns containing missing values with select_dtypes(include="number").dropna(axis=1).
+4. Standardize the selected numeric data using StandardScaler.
+5. For k from 1 to 10, fit KMeans and store model.inertia_ (WCSS).
+6. Plot k against WCSS to inspect the elbow.
+7. Fit KMeans with n_clusters=3 and obtain cluster labels.
+8. Fit AgglomerativeClustering(n_clusters=3) and obtain hierarchical cluster labels.
+
+KEY CONCEPTS
+- Clustering is unsupervised learning: no target labels are supplied.
+- K-Means assigns points to clusters based on distance to cluster centroids.
+- A centroid is the mean position of points assigned to a cluster.
+- WCSS/inertia is the sum of squared distances from each sample to its assigned cluster center.
+- As k increases, WCSS generally decreases.
+- The elbow method looks for a point where adding more clusters produces diminishing improvement.
+- Hierarchical clustering builds a hierarchy of clusters; agglomerative clustering starts with individual points and merges them.
+- StandardScaler is important for distance-based clustering when features have different scales.
+
+VIVA QUESTIONS AND ANSWERS
+Q1. What is clustering?
+A. Grouping data points by similarity without known target labels.
+
+Q2. What is the difference between supervised and unsupervised learning?
+A. Supervised learning uses labelled examples; unsupervised learning looks for structure without target labels.
+
+Q3. Explain K-Means.
+A. Initialize k centroids, assign points to the nearest centroid, update centroids to cluster means, and repeat until assignments/centroids stabilize or a stopping condition is met.
+
+Q4. What is k in K-Means?
+A. The number of clusters to form.
+
+Q5. What is WCSS?
+A. Within-Cluster Sum of Squares, also called inertia in scikit-learn KMeans: the sum of squared distances from samples to their assigned centroids.
+
+Q6. Why does WCSS decrease as k increases?
+A. More clusters allow points to be closer to their assigned centroid; at the extreme, one cluster per point can give zero inertia.
+
+Q7. What is the elbow method?
+A. Plot WCSS against k and choose a k near the bend where further increases yield smaller gains.
+
+Q8. Does the elbow method always give one obvious answer?
+A. No. The bend can be ambiguous; domain knowledge and other cluster-quality measures may also help.
+
+Q9. Why standardize features?
+A. To prevent large-scale features from dominating distance calculations.
+
+Q10. What is random_state=42 used for in KMeans?
+A. It makes the random initialization reproducible.
+
+Q11. What does n_init=10 mean?
+A. Run the algorithm with 10 centroid initializations and retain the best result according to inertia.
+
+Q12. What is hierarchical clustering?
+A. A method that creates nested clusters, often represented by a dendrogram.
+
+Q13. What is agglomerative clustering?
+A. A bottom-up hierarchical approach: begin with each point as its own cluster and merge clusters until the requested number remains.
+
+Q14. Do K-Means and hierarchical cluster labels mean the same thing?
+A. No. Labels are arbitrary identifiers. Cluster 0 from one algorithm is not automatically equivalent to cluster 0 from another.
+
+Q15. Why select numeric columns?
+A. These clustering algorithms require numerical input in this implementation. Categorical variables would need suitable encoding or a different method.
+
+Q16. What is a limitation of dropping columns with any missing value?
+A. It may discard useful features. Alternatives include imputation or carefully chosen feature selection.
+
+Q17. What are limitations of K-Means?
+A. It requires k in advance, is sensitive to initialization and outliers, and works best for roughly compact, spherical clusters under Euclidean distance.
+
+IMPORTANT CODE REVIEW NOTES
+- The notebook plots the elbow for k=1..10 but then chooses n_clusters=3. Make sure the plotted curve supports that choice; the code itself does not automatically detect the elbow.
+- The code uses numeric columns only. Numeric identifiers or codes may be included even if they are not meaningful distance features. Review the selected columns before clustering.
+- dropna(axis=1) removes any numeric column with at least one missing value. This is simple but can lose information.
+- StandardScaler is fitted and applied to the full dataset before clustering, which is normal when clustering all available unlabeled data. For a predictive evaluation pipeline, preprocessing should be fitted within the training split.
+
+============================================================
+CROSS-PRACTICAL QUICK REVISION
+============================================================
+
+1. Regression vs classification:
+   - Regression predicts continuous numbers (Uber fare).
+   - Classification predicts categories (spam, diabetes outcome, churn).
+
+2. Supervised vs unsupervised:
+   - Supervised: known target labels (Uber, spam, churn, diabetes).
+   - Unsupervised: no target labels (sales clustering).
+
+3. Train/test split:
+   - Training set fits the model.
+   - Test set estimates performance on unseen data.
+   - Never fit preprocessing such as StandardScaler on the test set when evaluating a supervised model.
+
+4. Common Python libraries:
+   - pandas: data loading and manipulation.
+   - NumPy: numerical operations.
+   - Matplotlib/Seaborn: plots.
+   - scikit-learn: splitting, preprocessing, models and metrics.
+
+5. Common data functions:
+   - pd.read_csv(): load CSV.
+   - df.head(): preview rows.
+   - df.info(): inspect schema and non-null counts.
+   - df.isnull().sum(): count missing values per column.
+   - train_test_split(): create train/test sets.
+   - fit(): train a model or fit a transformer.
+   - transform(): apply a fitted transformation.
+   - fit_transform(): fit and transform.
+   - predict(): generate predictions.
+
+6. Common pitfalls:
+   - Do not use target columns as input features.
+   - Do not fit scalers on test data.
+   - Do not compare models on different test splits.
+   - Accuracy alone can hide poor performance on imbalanced classes.
+   - Verify dataset column names and label encoding.
+   - Check for leakage, invalid values, missing data and outliers.
+
+7. Metric memory aid:
+   - R²: higher is generally better.
+   - RMSE/MAE: lower is better.
+   - Accuracy: fraction correct.
+   - Precision: reliability of positive predictions.
+   - Recall: fraction of actual positives found.
+   - F1-score: harmonic mean of precision and recall.
+   - Confusion matrix: counts of correct/incorrect class predictions.
+   - WCSS: lower with more clusters; use the elbow to balance fit and complexity.
+
+============================================================
+30-SECOND PRACTICAL SUMMARIES
+============================================================
+
+P1 Uber Fare:
+Clean data → handle outliers with IQR → extract time features → correlation heatmap → split → Linear Regression and Random Forest → compare R², RMSE, MAE.
+
+P2 Spam:
+Read emails → remove identifier → split features and Prediction → train KNN(k=5) and LinearSVC → compare accuracy and classification report.
+
+P3 Bank Churn:
+Statement only; no A3 code uploaded. Separate target and features → encode categorical columns → split → scale → neural network with binary output → evaluate accuracy and confusion matrix.
+
+P4 Gradient Descent:
+f(x)=(x+3)², f'(x)=2(x+3). Update x=x−αf'(x). Minimum is x=−3, y=0.
+
+P5 Diabetes:
+Separate Outcome → train/test split → scale using training data → KNN(k=5) → confusion matrix, accuracy, error rate, precision, recall.
+
+P6 Sales Clustering:
+Select numeric features → standardize → plot WCSS for k=1..10 → inspect elbow → fit KMeans(k=3) and AgglomerativeClustering(k=3).
+
+END OF LP3 ML VIVA PREPARATION
